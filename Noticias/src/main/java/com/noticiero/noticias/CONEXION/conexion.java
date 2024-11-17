@@ -18,6 +18,8 @@ public class conexion {
     private final String URL = "jdbc:oracle:thin:@//localhost:1521/XE";
     private final String USER = "PROYTECTOLGDB";
     private final String PASWORD = "Admin123";
+    
+    
 
     public Connection cadena;
 
@@ -28,7 +30,9 @@ public class conexion {
 public Connection conectar() {
         try {
             Class.forName(DRIVER);
-            this.cadena = DriverManager.getConnection(URL, USER, PASWORD);
+           // this.cadena = DriverManager.getConnection(URL, USER, PASWORD);
+              this.cadena = DriverManager.getConnection("jdbc:oracle:thin:@//localhost:1521/XE", "PROYTECTOLGDB", "Admin123");
+
         System.out.println("Conexión establecida exitosamente.");
 
         } catch (ClassNotFoundException | SQLException e) {

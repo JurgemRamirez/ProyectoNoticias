@@ -5,6 +5,8 @@
 
 package com.noticiero.noticias;
 
+import USUARIOS.usuarioDAO;
+import USUARIOS.usuarioDTO;
 import com.noticiero.noticias.CONEXION.conexion;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -25,7 +27,12 @@ public class Noticias {
         try {
             // Conectar a la base de datos
             connection = con.conectar();
-          //  System.out.println("Conexión exitosa.");
+          
+               //        usuarioDAO usuarioDAO = new usuarioDAO();
+        //          System.out.println("Lista de usuarios:");
+        //    for (usuarioDTO usuario : usuarioDAO.readUsuarios()) {
+         //       System.out.println(usuario.getId() + " - " + usuario.getUsername() + " - " + usuario.getEmail() + " - " + usuario.getRole());
+          //  }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,6 +43,7 @@ public class Noticias {
                 System.out.println("Conexión cerrada.");
             }
         }
+
    }
       
    
