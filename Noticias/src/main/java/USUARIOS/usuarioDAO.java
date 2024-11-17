@@ -17,7 +17,7 @@ import oracle.jdbc.OracleTypes;
 public class usuarioDAO {
     
     // Crear un usuario
-    public void createUsuario(String username, String email, String password, String role) throws SQLException {
+    public String createUsuario(String username, String email, String password, String role) throws SQLException {
         String sql = "{CALL SP_CREATE_USUARIO(?, ?, ?, ?)}";
          conexion conDB = new conexion();
 
@@ -27,9 +27,50 @@ public class usuarioDAO {
             stmt.setString(2, email);
             stmt.setString(3, password);
             stmt.setString(4, role);
+           
             stmt.execute();
-        }
+            return "Usuario creado exitosamente.";
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error al crear el usuario: " + e.getMessage();
+        } 
     }
+    
+      // Método para validar usuario y contraseña usando la función SQL en la base de datos
+ public boolean validarUsuario(String username, String password) {
+    boolean isValid = false;
+   
+    // Consulta que llama a la función validar_usuario
+    String sql = "{? = call validar_usuario(?, ?)}";
+    conexion conDB = new conexion();
+
+    try (Connection conn = conDB.conectar();
+         CallableStatement stmt = conn.prepareCall(sql)) {
+        
+        // Configurar los parámetros
+        stmt.registerOutParameter(1, Types.INTEGER); // El primer parámetro es el valor de retorno (INTEGER, no BOOLEAN)
+        stmt.setString(2, username);  // El nombre de usuario
+        stmt.setString(3, password);  // La contraseña
+        
+        // Ejecutar la función
+        stmt.execute();
+        
+        // Obtener el resultado de la función (0 o 1)
+        int result = stmt.getInt(1);
+        
+        // Si el resultado es 1, es válido
+        if (result == 1) {
+            isValid = true;
+        }
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    
+    return isValid;
+}
+
     
        // Leer todos los usuarios
     public List<usuarioDTO> readUsuarios() throws SQLException {
