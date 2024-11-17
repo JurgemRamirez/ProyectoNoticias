@@ -17,10 +17,10 @@ public class RegistroUser extends JFrame {
         setTitle("Registro de Usuario");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centrar ventana en pantalla
-        setLayout(new GridLayout(5, 2, 10, 10)); // Diseño de la ventana
+        setLocationRelativeTo(null); 
+        setLayout(new GridLayout(5, 2, 10, 10)); 
 
-        // Crear etiquetas y campos de texto
+      
         JLabel labelNombre = new JLabel("Nombre de Usuario:");
         JTextField campoNombre = new JTextField();
 
@@ -30,25 +30,25 @@ public class RegistroUser extends JFrame {
         JLabel labelContraseña = new JLabel("Contraseña:");
         JPasswordField campoContraseña = new JPasswordField();
 
-        // Botón para registrar
+        
         JButton botonRegistrar = new JButton("Registrar");
         JLabel resultado = new JLabel("");
 
-        // Agregar funcionalidad al botón
+        
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Datos correctos
+                
                 String usuarioCorrecto = "admin";
                 String correoCorrecto = "admin@gmail.com";
                 String contrasenaCorrecta = "2024";
 
-                // Capturar los datos ingresados por el usuario
+              
                 String usuarioIngresado = campoNombre.getText();
                 String correoIngresado = campoCorreo.getText();
                 String contrasenaIngresada = new String(campoContraseña.getPassword());
 
-                // Validar los datos
+                
                 if (usuarioIngresado.equals(usuarioCorrecto) &&
                     correoIngresado.equals(correoCorrecto) &&
                     contrasenaIngresada.equals(contrasenaCorrecta)) {
@@ -61,23 +61,21 @@ public class RegistroUser extends JFrame {
             }
         });
 
-        // Añadir componentes a la ventana
+       
         add(labelNombre);
         add(campoNombre);
         add(labelCorreo);
         add(campoCorreo);
         add(labelContraseña);
         add(campoContraseña);
-        add(new JLabel("")); // Espacio vacío
+        add(new JLabel("")); 
         add(botonRegistrar);
-        add(new JLabel("")); // Espacio vacío
+        add(new JLabel("")); 
         add(resultado);
 
-        // Mostrar la ventana
         setVisible(true);
     }
 
-    // Método principal para ejecutar el formulario
     public static void main(String[] args) {
         new RegistroUser();
     }
