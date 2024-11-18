@@ -74,6 +74,11 @@ public class FrmCrearUser extends javax.swing.JFrame {
         contrasena.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         contrasena.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         contrasena.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        contrasena.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contrasenaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -167,6 +172,10 @@ public class FrmCrearUser extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_button_guardar2ActionPerformed
+
+    private void contrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contrasenaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_contrasenaActionPerformed
 
     /**
      * @param args the command line arguments
