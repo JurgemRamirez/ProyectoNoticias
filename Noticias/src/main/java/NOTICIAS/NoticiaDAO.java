@@ -4,6 +4,7 @@
  */
 package NOTICIAS;
 
+import CATEGORIAS.categoriaDTO;
 import com.noticiero.noticias.CONEXION.conexion;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -11,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import oracle.jdbc.OracleTypes;
 
 /**
@@ -25,16 +28,22 @@ public class NoticiaDAO {
 
         try (Connection conn = conDB.conectar();
                      CallableStatement stmt = conn.prepareCall(sql)) {
-            stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.execute();
+          //  stmt.registerOutParameter(1, OracleTypes.CURSOR);
+          //  stmt.execute();
 
             stmt.setString(1, noticia.getTitulo());
             stmt.setString(2, noticia.getContenido());
             stmt.setString(3, noticia.getEscritor());
             stmt.setDate(4, new java.sql.Date(noticia.getFechaPublicada().getTime()));
-            stmt.setInt(5, noticia.getCategoriaId());
+            stmt.setLong(5, noticia.getCategoriaId());
             stmt.execute();
+                    System.out.println("Noticia insertada correctamente.");
+
         }
+        catch (SQLException ex) {
+        // Manejo de errores
+        JOptionPane.showMessageDialog(null, "Error al insertar la noticia: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }
      
       public void actualizarNoticia(Noticia noticia) throws SQLException {
@@ -115,6 +124,43 @@ public class NoticiaDAO {
         }
         return noticias;
     }
+            
+    
+      public DefaultComboBoxModel<categoriaDTO> cargarDatosCategorias() {
+     
+        // Se inicializa a false por defecto
+    Connection cn = null;
+
+    
+            DefaultComboBoxModel<categoriaDTO> model = new DefaultComboBoxModel<>();
+
+         conexion db = new conexion();
+        String sql = "{ call SP_READ_CATEGORIAS(?) }";
+
+    try (Connection conn = db.conectar();
+             CallableStatement stmt = conn.prepareCall(sql)) {
+            stmt.registerOutParameter(1, OracleTypes.CURSOR);
+            stmt.execute();
+        
+ 
+          try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
+                while (rs.next()) {
+                Long id = rs.getLong("CATEGORIA_ID");
+                String nombre = rs.getString("NOMBRE");
+
+                model.addElement(new categoriaDTO(id, nombre));
+
+            }
+          }
+    
+    } catch (SQLException ex) {
+      JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos: " + ex.getMessage());
+
+    }
+          
+  return model;
+         
+  }
 
     
 }

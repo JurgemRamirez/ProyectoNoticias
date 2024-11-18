@@ -28,4 +28,9 @@ public class categoriaDTO {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    
+      @Override
+    public String toString() {
+        return nombre; // Devuelve el nombre de la especialidad para la representación en cadena
+    }
 }

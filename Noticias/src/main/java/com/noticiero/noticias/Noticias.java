@@ -28,12 +28,11 @@ public class Noticias {
             // Conectar a la base de datos
             connection = con.conectar();
           
-               //        usuarioDAO usuarioDAO = new usuarioDAO();
-        //          System.out.println("Lista de usuarios:");
-        //    for (usuarioDTO usuario : usuarioDAO.readUsuarios()) {
-         //       System.out.println(usuario.getId() + " - " + usuario.getUsername() + " - " + usuario.getEmail() + " - " + usuario.getRole());
-          //  }
-
+             //         usuarioDAO usuarioDAO = new usuarioDAO();
+           //      System.out.println("Lista de usuarios:");
+         //  for (usuarioDTO usuario : usuarioDAO.readUsuarios()) {
+          //     System.out.println(usuario.getId() + " - " + usuario.getUsername() + " - " + usuario.getEmail() + " - " + usuario.getRole());
+         //  }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
