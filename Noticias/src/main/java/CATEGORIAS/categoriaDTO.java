@@ -31,6 +31,6 @@ public class categoriaDTO {
     
       @Override
     public String toString() {
-        return nombre; // Devuelve el nombre de la especialidad para la representación en cadena
+        return nombre; // Devuelve el nombre de la categoria para la representación en cadena
     }
 }

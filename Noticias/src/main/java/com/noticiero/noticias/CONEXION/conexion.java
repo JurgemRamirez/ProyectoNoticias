@@ -30,8 +30,8 @@ public class conexion {
 public Connection conectar() {
         try {
             Class.forName(DRIVER);
-           // this.cadena = DriverManager.getConnection(URL, USER, PASWORD); //
-              this.cadena = DriverManager.getConnection("jdbc:oracle:thin:@//localhost:1521/orcl", "progra", "progras");
+            this.cadena = DriverManager.getConnection(URL, USER, PASWORD); //
+           //   this.cadena = DriverManager.getConnection("jdbc:oracle:thin:@//localhost:1521/orcl", "progra", "progras");
 
         System.out.println("Conexión establecida exitosamente.");
 

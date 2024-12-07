@@ -1,4 +1,4 @@
--- Procedimiento para insertar una categoría
+-- Procedimiento para insertar una categorï¿½a
 CREATE OR REPLACE PROCEDURE insertar_categoria(
     p_nombre IN VARCHAR2
 ) IS
@@ -8,7 +8,7 @@ BEGIN
 END insertar_categoria;
 /
 
--- Procedimiento para actualizar una categoría
+-- Procedimiento para actualizar una categorï¿½a
 CREATE OR REPLACE PROCEDURE actualizar_categoria(
     p_categoria_id IN NUMBER,
     p_nombre IN VARCHAR2
@@ -20,7 +20,7 @@ BEGIN
 END actualizar_categoria;
 /
 
--- Procedimiento para eliminar una categoría
+-- Procedimiento para eliminar una categorï¿½a
 CREATE OR REPLACE PROCEDURE eliminar_categoria(
     p_categoria_id IN NUMBER
 ) IS
@@ -30,7 +30,7 @@ BEGIN
 END eliminar_categoria;
 /
 
--- Procedimiento para consultar una categoría por ID
+-- Procedimiento para consultar una categorï¿½a por ID
 CREATE OR REPLACE PROCEDURE consultar_categoria(
     p_categoria_id IN NUMBER,
     p_resultado OUT SYS_REFCURSOR
@@ -41,7 +41,7 @@ BEGIN
 END consultar_categoria;
 /
 
--- Procedimiento para listar todas las categorías
+-- Procedimiento para listar todas las categorï¿½as
 CREATE OR REPLACE PROCEDURE listar_categorias(
     p_resultado OUT SYS_REFCURSOR
 ) IS
@@ -50,6 +50,16 @@ BEGIN
         SELECT * FROM CATEGORIAS;
 END listar_categorias;
 /
+
+-- Cursor para TODAS categorï¿½as 
+create or replace PROCEDURE SP_READ_CATEGORIAS (
+    CURSOR_CATEGORIAS OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN CURSOR_CATEGORIAS FOR
+    SELECT CATEGORIA_ID, NOMBRE
+    FROM CATEGORIAS;
+END SP_READ_CATEGORIAS;
 
 -- LA VISTA
 
@@ -62,7 +72,7 @@ FROM CATEGORIAS;
 -- PAQUETES
 
 CREATE OR REPLACE PACKAGE PKG_GESTION_CATEGORIAS AS
-    -- Declaraciones públicas
+    -- Declaraciones pï¿½blicas
     PROCEDURE insertar_categoria(p_nombre IN VARCHAR2);
     PROCEDURE actualizar_categoria(p_categoria_id IN NUMBER, p_nombre IN VARCHAR2);
     PROCEDURE eliminar_categoria(p_categoria_id IN NUMBER);
@@ -120,7 +130,7 @@ END PKG_REPORTES_CATEGORIAS;
 
 --CURSORES
 
--- Cursor para obtener todas las categorías
+-- Cursor para obtener todas las categorï¿½as
 DECLARE
     CURSOR cur_categorias IS
         SELECT CATEGORIA_ID, NOMBRE FROM CATEGORIAS;
@@ -131,12 +141,12 @@ BEGIN
 END;
 /
 
--- Cursor para buscar categorías por nombre
+-- Cursor para buscar categorï¿½as por nombre
 DECLARE
     CURSOR cur_categorias_nombre IS
         SELECT CATEGORIA_ID, NOMBRE 
         FROM CATEGORIAS 
-        WHERE NOMBRE LIKE 'Tecnología%'; -- Cambiar filtro según necesidad
+        WHERE NOMBRE LIKE 'Tecnologï¿½a%'; -- Cambiar filtro segï¿½n necesidad
 BEGIN
     FOR categoria IN cur_categorias_nombre LOOP
         DBMS_OUTPUT.PUT_LINE('ID: ' || categoria.CATEGORIA_ID || ' - Nombre: ' || categoria.NOMBRE);

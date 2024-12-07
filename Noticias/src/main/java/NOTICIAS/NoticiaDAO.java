@@ -126,41 +126,36 @@ public class NoticiaDAO {
     }
             
     
-      public DefaultComboBoxModel<categoriaDTO> cargarDatosCategorias() {
-     
-        // Se inicializa a false por defecto
-    Connection cn = null;
-
-    
-            DefaultComboBoxModel<categoriaDTO> model = new DefaultComboBoxModel<>();
-
-         conexion db = new conexion();
-        String sql = "{ call SP_READ_CATEGORIAS(?) }";
+public DefaultComboBoxModel<categoriaDTO> cargarDatosCategorias() {
+    DefaultComboBoxModel<categoriaDTO> model = new DefaultComboBoxModel<>();
+    conexion db = new conexion();
+    String sql = "{ call SP_READ_CATEGORIAS(?) }";
 
     try (Connection conn = db.conectar();
-             CallableStatement stmt = conn.prepareCall(sql)) {
-            stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.execute();
+         CallableStatement stmt = conn.prepareCall(sql)) {
         
- 
-          try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
-                while (rs.next()) {
+        stmt.registerOutParameter(1, OracleTypes.CURSOR); // Registrar el cursor
+        stmt.execute(); // Ejecutar el procedimiento
+
+        try (ResultSet rs = (ResultSet) stmt.getObject(1)) { // Obtener el cursor
+            int count = 0;
+            while (rs.next()) {
+                count++;
                 Long id = rs.getLong("CATEGORIA_ID");
                 String nombre = rs.getString("NOMBRE");
-
-                model.addElement(new categoriaDTO(id, nombre));
-
+                System.out.println("Fila #" + count + ": ID=" + id + ", Nombre=" + nombre);
+                model.addElement(new categoriaDTO(id, nombre)); // Añadir al modelo
             }
-          }
-    
+            System.out.println("Total filas leídas: " + count);
+        }
     } catch (SQLException ex) {
-      JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos: " + ex.getMessage());
-
+        JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos: " + ex.getMessage());
     }
-          
-  return model;
-         
-  }
+
+    System.out.println("Elementos en el modelo: " + model.getSize());
+    return model;
+}
+
 
     
 }
