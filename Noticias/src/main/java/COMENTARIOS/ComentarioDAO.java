@@ -14,7 +14,7 @@ public class ComentarioDAO {
 
  
     public void insertarComentario(ComentarioDTO comentarioDTO) throws SQLException {
-        String sql = "CALL SP_COMENTAR_NOTICIA(?, ?, ?)";  // Llamamos al procedimiento almacenado
+        String sql = "CALL SP_COMENTAR_NOTICIA(?, ?, ?)";  
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, comentarioDTO.getNewsId());
