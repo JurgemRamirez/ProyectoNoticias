@@ -9,7 +9,7 @@ public class Comentario {
     private String contenidoComentario;
     private Date fechaComentada;
 
-    // Getters y Setters
+
     public int getComentarioId() {
         return comentarioId;
     }

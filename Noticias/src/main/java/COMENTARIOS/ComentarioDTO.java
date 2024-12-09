@@ -5,14 +5,14 @@ public class ComentarioDTO {
     private int userId;
     private String contenidoComentario;
 
-    // Constructor
+
     public ComentarioDTO(int newsId, int userId, String contenidoComentario) {
         this.newsId = newsId;
         this.userId = userId;
         this.contenidoComentario = contenidoComentario;
     }
 
-    // Getters y Setters
+
     public int getNewsId() {
         return newsId;
     }
