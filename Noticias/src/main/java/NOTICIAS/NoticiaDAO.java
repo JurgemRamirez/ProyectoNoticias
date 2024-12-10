@@ -143,16 +143,16 @@ public DefaultComboBoxModel<categoriaDTO> cargarDatosCategorias() {
                 count++;
                 Long id = rs.getLong("CATEGORIA_ID");
                 String nombre = rs.getString("NOMBRE");
-                System.out.println("Fila #" + count + ": ID=" + id + ", Nombre=" + nombre);
+              //  System.out.println("Fila #" + count + ": ID=" + id + ", Nombre=" + nombre);
                 model.addElement(new categoriaDTO(id, nombre)); // Añadir al modelo
             }
-            System.out.println("Total filas leídas: " + count);
+         //   System.out.println("Total filas leídas: " + count);
         }
     } catch (SQLException ex) {
         JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos: " + ex.getMessage());
     }
 
-    System.out.println("Elementos en el modelo: " + model.getSize());
+  //  System.out.println("Elementos en el modelo: " + model.getSize());
     return model;
 }
 

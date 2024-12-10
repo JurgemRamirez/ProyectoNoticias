@@ -4,18 +4,152 @@
  */
 package DASHBOARD;
 
+import com.noticiero.noticias.CONEXION.conexion;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+import javax.swing.*;
+import oracle.jdbc.OracleTypes;
+
 /**
  *
  * @author jurgemramirez
  */
 public class FrmDashboard extends javax.swing.JFrame {
+ 
+    private JPanel panelNoticias; // Panel principal que contendrá todos los paneles de noticias
 
     /**
      * Creates new form FrmDashboard
      */
     public FrmDashboard() {
         initComponents();
+          // Configuración del JFrame
+      //  setTitle("Noticias");
+       // setSize(1200, 600);
+       // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+        
+        // Panel principal para las noticias
+        panelNoticias = new JPanel();
+        panelNoticias.setLocation(-32485, -32596);
+        panelNoticias.setLayout(new GridLayout(0, 3, 10, 10)); // Grid con 3 columnas
+        add(new JScrollPane(panelNoticias), BorderLayout.CENTER);
+        
+        // Cargar las noticias al iniciar la ventana
+        cargarNoticias();
+
+        setVisible(true);
     }
+    
+    
+     // Método para cargar las noticias desde la base de datos
+    private void cargarNoticias() {
+        //Connection conn = null;
+        CallableStatement stmt = null;
+        ResultSet rs = null;
+            conexion conDB = new conexion();
+              String sql = "{ call listar_noticias(?) }";
+         Connection conn = conDB.conectar();
+     try{
+            // Conectar a la base de datos Oracle (ajusta los parámetros de conexión)
+          //  conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "usuario", "contraseña");
+                      stmt = conn.prepareCall("{ call listar_noticias(?) }");
+ 
+
+            
+            stmt.registerOutParameter(1, OracleTypes.CURSOR);
+            stmt.execute();
+            
+            // Obtener el cursor
+            rs = (ResultSet) stmt.getObject(1);
+            
+            // Limpiar el panel antes de cargar nuevas noticias
+            panelNoticias.removeAll();
+            
+            // Iterar sobre el resultado y agregar un panel para cada noticia
+            while (rs.next()) {
+                String titulo = rs.getString("titulo");
+                String escritor = rs.getString("escritor");
+                Date fecha = rs.getDate("fecha_Publicada");
+                String Contenido = rs.getString("Contenido");
+
+                // System.out.println("fecha: " + fecha);
+
+                // Crear un panel para cada noticia
+                JPanel panelNoticia = new JPanel();
+                panelNoticia.setLayout(new BorderLayout());
+                panelNoticia.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                
+                // Crear etiquetas para el título y escritor
+                JLabel lblTitulo = new JLabel(titulo, SwingConstants.CENTER);
+                lblTitulo.setFont(new Font("Arial", Font.BOLD, 14));
+                
+                JLabel lblEscritor = new JLabel("Escritor: " + escritor, SwingConstants.CENTER);
+                lblEscritor.setFont(new Font("Arial", Font.ITALIC, 12));
+                
+                JLabel lblFecha = new JLabel("Fecha: " + fecha, SwingConstants.CENTER);
+                  lblFecha.setFont(new Font("Arial", Font.ITALIC, 12));
+                
+                // Crear un botón para ver más detalles
+                JButton btnVerMas = new JButton("Ver Más");
+                btnVerMas.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        mostrarDetallesNoticia(titulo, escritor,fecha,Contenido);
+                    }
+                });
+                
+                    // Crear un panel secundario para los textos
+                JPanel panelTexto = new JPanel();
+                panelTexto.setLayout(new BoxLayout(panelTexto, BoxLayout.Y_AXIS)); // Alineación vertical compacta
+         // Reducir márgenes de cada JLabel para disminuir espacio
+                    lblTitulo.setBorder(BorderFactory.createEmptyBorder(90, 0, 2, 0));
+                    lblEscritor.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+                    lblFecha.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+
+                    // Agregar las etiquetas al panel con menor espacio entre ellas
+                    panelTexto.add(lblTitulo);
+                    panelTexto.add(lblEscritor);
+                    panelTexto.add(lblFecha);
+                
+                // Agregar los componentes al panel
+                panelNoticia.add(panelTexto, BorderLayout.CENTER);
+
+                panelNoticia.add(btnVerMas, BorderLayout.SOUTH);
+                
+                // Agregar el panel de noticia al panel principal
+                panelNoticias.add(panelNoticia);
+            }
+            
+            // Actualizar la interfaz
+            panelNoticias.revalidate();
+            panelNoticias.repaint();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                // Cerrar conexiones
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+       // Método para mostrar los detalles de la noticia
+    private void mostrarDetallesNoticia(String titulo, String escritor, Date fecha,String Contenido ) {
+        // Crear un cuadro de diálogo con más detalles
+        JOptionPane.showMessageDialog(this, "Detalles de la noticia:\n\n" +
+                                            "Título: " + titulo + "\n" +
+                                            "Escritor: " + escritor + "\n" +
+                                            "Fecha: " + fecha+ "\n\n" +
+                                             "Contenido: " + Contenido,
+                                            "Detalles de la Noticia", JOptionPane.INFORMATION_MESSAGE);
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,6 +160,8 @@ public class FrmDashboard extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         buscar = new javax.swing.JTextField();
@@ -33,7 +169,6 @@ public class FrmDashboard extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -44,6 +179,9 @@ public class FrmDashboard extends javax.swing.JFrame {
         jMenuItem10 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        jLabel2.setText("Ultimas Noticias");
 
         jPanel1.setBackground(new java.awt.Color(0, 102, 255));
 
@@ -79,7 +217,7 @@ public class FrmDashboard extends javax.swing.JFrame {
                 .addComponent(buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 455, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 456, Short.MAX_VALUE)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
@@ -98,8 +236,30 @@ public class FrmDashboard extends javax.swing.JFrame {
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
-        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel2.setText("Ultimas Noticias");
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 982, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addContainerGap(9, Short.MAX_VALUE))
+        );
 
         jMenu1.setText("Noticias");
 
@@ -152,26 +312,13 @@ public class FrmDashboard extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addContainerGap(437, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(527, Short.MAX_VALUE))
         );
 
         pack();
@@ -248,6 +395,7 @@ public class FrmDashboard extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

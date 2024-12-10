@@ -260,9 +260,9 @@ public class FrmCrearNoticia extends javax.swing.JFrame {
             // Obtener el ID y el nombre de la categoria seleccionada
             
              id_categoria =  categoriaSeleccionada.getCategoriaId().intValue();;
-  System.out.println("ID: " + id_categoria);
+  //System.out.println("ID: " + id_categoria);
             // Mostrar los datos
-            System.out.println("ID: " + id_categoria);
+           // System.out.println("ID: " + id_categoria);
            // System.out.println("Nombre: " + nombre);
        
 
