@@ -32,7 +32,6 @@ public class FrmDashboard extends javax.swing.JFrame {
         
         // Panel principal para las noticias
         panelNoticias = new JPanel();
-        panelNoticias.setLocation(-32485, -32596);
         panelNoticias.setLayout(new GridLayout(0, 3, 10, 10)); // Grid con 3 columnas
         add(new JScrollPane(panelNoticias), BorderLayout.CENTER);
         
@@ -49,7 +48,6 @@ public class FrmDashboard extends javax.swing.JFrame {
         CallableStatement stmt = null;
         ResultSet rs = null;
             conexion conDB = new conexion();
-              String sql = "{ call listar_noticias(?) }";
          Connection conn = conDB.conectar();
      try{
             // Conectar a la base de datos Oracle (ajusta los parámetros de conexión)
@@ -149,6 +147,95 @@ public class FrmDashboard extends javax.swing.JFrame {
                                              "Contenido: " + Contenido,
                                             "Detalles de la Noticia", JOptionPane.INFORMATION_MESSAGE);
     }
+    
+    
+    
+        private  void buscarNoticias(String titulo) {
+        
+
+        panelNoticias.removeAll(); // Limpiar las noticias previas
+     CallableStatement stmt = null;
+        ResultSet rs = null;
+            conexion conDB = new conexion();
+                     Connection conn = conDB.conectar();
+
+      try{
+            // Conectar a la base de datos Oracle (ajusta los parámetros de conexión)
+          //  conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "usuario", "contraseña");
+                      stmt = conn.prepareCall("{ call consultar_noticia_TermTitulo(?,?) }");
+ 
+            // Configurar parámetros de entrada y salida
+            stmt.setString(1, titulo);
+            stmt.registerOutParameter(2, OracleTypes.CURSOR);
+
+            // Ejecutar el procedimiento almacenado
+            stmt.execute();
+              // Obtener el cursor
+            rs = (ResultSet) stmt.getObject(2);
+            
+
+            // Obtener resultados
+            while (rs.next()) {
+                String tituloNoticia = rs.getString("titulo");
+                String escritor = rs.getString("escritor");
+                Date fecha = rs.getDate("fecha_Publicada");
+                String Contenido = rs.getString("Contenido");
+
+                // Crear panel para cada noticia
+                JPanel panelNoticia = new JPanel();
+                panelNoticia.setLayout(new BorderLayout());
+                panelNoticia.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                panelNoticia.setPreferredSize(new Dimension(200, 100));
+
+                // Agregar contenido al panel
+                JLabel lblTitulo = new JLabel("Título: " + tituloNoticia);
+                JLabel lblEscritor = new JLabel("Escritor: " + escritor);
+                JLabel lblFecha = new JLabel("Fecha: " + fecha);
+                JButton btnDetalles = new JButton("Ver Detalles");
+
+                // Reducir espacio entre etiquetas
+                lblTitulo.setBorder(BorderFactory.createEmptyBorder(90, 0, 2, 0));
+                    lblEscritor.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+                    lblFecha.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+        
+                // Crear un botón para ver más detalles
+                JButton btnVerMas = new JButton("Ver Más");
+                btnVerMas.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        mostrarDetallesNoticia(titulo, escritor,fecha,Contenido);
+                    }
+                });
+                
+                          // Crear un panel secundario para los textos
+                JPanel panelTexto = new JPanel();
+                panelTexto.setLayout(new BoxLayout(panelTexto, BoxLayout.Y_AXIS)); // Alineación vertical compacta
+         // Reducir márgenes de cada JLabel para disminuir espacio
+                    lblTitulo.setBorder(BorderFactory.createEmptyBorder(90, 0, 2, 0));
+                    lblEscritor.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+                    lblFecha.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+
+                    // Agregar las etiquetas al panel con menor espacio entre ellas
+                    panelTexto.add(lblTitulo);
+                    panelTexto.add(lblEscritor);
+                    panelTexto.add(lblFecha);
+                
+                // Agregar los componentes al panel
+                panelNoticia.add(panelTexto, BorderLayout.CENTER);
+                panelNoticia.add(btnVerMas, BorderLayout.SOUTH);
+
+                // Agregar panel al panel principal
+                panelNoticias.add(panelNoticia);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al buscar noticias: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Refrescar el panel principal
+        panelNoticias.revalidate();
+        panelNoticias.repaint();
+    }
 
 
     /**
@@ -198,6 +285,11 @@ public class FrmDashboard extends javax.swing.JFrame {
         jButton1.setBackground(new java.awt.Color(51, 204, 0));
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Buscar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setBackground(new java.awt.Color(255, 204, 0));
         jButton2.setText("Iniciar");
@@ -343,6 +435,11 @@ public class FrmDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     
     }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        buscarNoticias(buscar.getText());
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

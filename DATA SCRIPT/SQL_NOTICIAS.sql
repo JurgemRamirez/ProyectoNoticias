@@ -63,7 +63,20 @@ BEGIN
         SELECT * FROM NOTICIA;
 END listar_noticias;
 /
+-- Procedimiento para listar todas las noticias por termino
 
+CREATE OR REPLACE PROCEDURE consultar_noticia_TermTitulo(
+    p_title_pattern IN VARCHAR2, 
+    p_resultado OUT SYS_REFCURSOR
+) IS
+BEGIN
+    
+    OPEN p_resultado FOR
+        SELECT * 
+        FROM NOTICIA 
+        WHERE TITULO LIKE '%' || p_title_pattern || '%';
+END consultar_noticia_TermTitulo;
+/
 
 -- VISTA
 CREATE OR REPLACE VIEW VISTA_NOTICIAS AS
