@@ -4,6 +4,13 @@
  */
 package DASHBOARD;
 
+import CATEGORIAS.ConsultarCategoria;
+import CATEGORIAS.CrearCategoria;
+import COMENTARIOS.CrearComentario;
+import COMENTARIOS.FrmCrearComentario;
+import NOTICIAS.FrmCrearNoticia;
+import USUARIOS.FrmCrearUser;
+import USUARIOS.FrmIniciar;
 import com.noticiero.noticias.CONEXION.conexion;
 import java.awt.*;
 import java.awt.event.*;
@@ -38,7 +45,7 @@ public class FrmDashboard extends javax.swing.JFrame {
         // Cargar las noticias al iniciar la ventana
         cargarNoticias();
 
-        setVisible(true);
+       // setVisible(true);
     }
     
     
@@ -67,6 +74,8 @@ public class FrmDashboard extends javax.swing.JFrame {
             
             // Iterar sobre el resultado y agregar un panel para cada noticia
             while (rs.next()) {
+                                            int idNoticia = rs.getInt("news_id"); // Asume que tienes una columna "id_noticia"
+
                 String titulo = rs.getString("titulo");
                 String escritor = rs.getString("escritor");
                 Date fecha = rs.getDate("fecha_Publicada");
@@ -97,6 +106,13 @@ public class FrmDashboard extends javax.swing.JFrame {
                     }
                 });
                 
+                          // Botón "Agregar Comentario"
+            JButton btnAgregarComentario = new JButton("Agregar Comentario");
+            btnAgregarComentario.addActionListener(e -> {
+                FrmCrearComentario formComentario = new FrmCrearComentario(idNoticia);
+                formComentario.setVisible(true);
+            });
+                
                     // Crear un panel secundario para los textos
                 JPanel panelTexto = new JPanel();
                 panelTexto.setLayout(new BoxLayout(panelTexto, BoxLayout.Y_AXIS)); // Alineación vertical compacta
@@ -114,7 +130,8 @@ public class FrmDashboard extends javax.swing.JFrame {
                 panelNoticia.add(panelTexto, BorderLayout.CENTER);
 
                 panelNoticia.add(btnVerMas, BorderLayout.SOUTH);
-                
+                panelNoticia.add(btnAgregarComentario, BorderLayout.SOUTH);
+
                 // Agregar el panel de noticia al panel principal
                 panelNoticias.add(panelNoticia);
             }
@@ -176,6 +193,8 @@ public class FrmDashboard extends javax.swing.JFrame {
 
             // Obtener resultados
             while (rs.next()) {
+                            int idNoticia = rs.getInt("news_id"); // Asume que tienes una columna "id_noticia"
+
                 String tituloNoticia = rs.getString("titulo");
                 String escritor = rs.getString("escritor");
                 Date fecha = rs.getDate("fecha_Publicada");
@@ -206,6 +225,14 @@ public class FrmDashboard extends javax.swing.JFrame {
                     }
                 });
                 
+                // Botón "Agregar Comentario"
+            JButton btnAgregarComentario = new JButton("Agregar Comentario");
+            btnAgregarComentario.addActionListener(e -> {
+                FrmCrearComentario formComentario = new FrmCrearComentario(idNoticia);
+                formComentario.setVisible(true);
+            });
+
+                
                           // Crear un panel secundario para los textos
                 JPanel panelTexto = new JPanel();
                 panelTexto.setLayout(new BoxLayout(panelTexto, BoxLayout.Y_AXIS)); // Alineación vertical compacta
@@ -221,7 +248,8 @@ public class FrmDashboard extends javax.swing.JFrame {
                 
                 // Agregar los componentes al panel
                 panelNoticia.add(panelTexto, BorderLayout.CENTER);
-                panelNoticia.add(btnVerMas, BorderLayout.SOUTH);
+              //  panelNoticia.add(btnVerMas, BorderLayout.SOUTH);
+                panelNoticia.add(btnAgregarComentario, BorderLayout.NORTH);
 
                 // Agregar panel al panel principal
                 panelNoticias.add(panelNoticia);
@@ -293,10 +321,20 @@ public class FrmDashboard extends javax.swing.JFrame {
 
         jButton2.setBackground(new java.awt.Color(255, 204, 0));
         jButton2.setText("Iniciar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(0, 204, 204));
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Registrarse");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -418,28 +456,44 @@ public class FrmDashboard extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
- 
+     FrmCrearNoticia frm = new FrmCrearNoticia();
+        frm.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
-   
+     CrearCategoria frm = new CrearCategoria();
+        frm.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
-
+ ConsultarCategoria frm = new ConsultarCategoria();
+        frm.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
         // TODO add your handling code here:
-    
+    FrmCrearUser frm = new FrmCrearUser();
+        frm.setVisible(true);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         buscarNoticias(buscar.getText());
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+         FrmCrearUser frm = new FrmCrearUser();
+        frm.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+           FrmIniciar frm = new FrmIniciar();
+        frm.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
