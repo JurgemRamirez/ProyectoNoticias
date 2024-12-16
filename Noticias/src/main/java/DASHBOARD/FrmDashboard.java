@@ -45,7 +45,7 @@ public class FrmDashboard extends javax.swing.JFrame {
         // Cargar las noticias al iniciar la ventana
         cargarNoticias();
 
-       // setVisible(true);
+        setVisible(true);
     }
     
     
@@ -59,10 +59,8 @@ public class FrmDashboard extends javax.swing.JFrame {
      try{
             // Conectar a la base de datos Oracle (ajusta los parámetros de conexión)
           //  conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "usuario", "contraseña");
-                      stmt = conn.prepareCall("{ call listar_noticias(?) }");
+        stmt = conn.prepareCall("{ call PKG_GESTION_NOTICIAS.listar_noticias(?) }");
  
-
-            
             stmt.registerOutParameter(1, OracleTypes.CURSOR);
             stmt.execute();
             
@@ -126,11 +124,16 @@ public class FrmDashboard extends javax.swing.JFrame {
                     panelTexto.add(lblEscritor);
                     panelTexto.add(lblFecha);
                 
+                    
+   JPanel panelBotones = new JPanel();
+            panelBotones.setLayout(new FlowLayout());
+            panelBotones.add(btnVerMas);
+            panelBotones.add(btnAgregarComentario);
                 // Agregar los componentes al panel
                 panelNoticia.add(panelTexto, BorderLayout.CENTER);
 
-                panelNoticia.add(btnVerMas, BorderLayout.SOUTH);
-                panelNoticia.add(btnAgregarComentario, BorderLayout.SOUTH);
+               panelNoticia.add(panelBotones, BorderLayout.SOUTH);
+
 
                 // Agregar el panel de noticia al panel principal
                 panelNoticias.add(panelNoticia);
@@ -141,8 +144,18 @@ public class FrmDashboard extends javax.swing.JFrame {
             panelNoticias.repaint();
             
         } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
+    // Obtener el mensaje de error y el código desde Oracle
+    int errorCode = e.getErrorCode(); // Código de error de Oracle
+    String errorMessage = e.getMessage(); // Mensaje completo del error
+
+    // También puedes mostrar el error en un diálogo para el usuario
+    JOptionPane.showMessageDialog(
+        this, 
+        "Ocurrió un error al listar las noticias:\nCódigo: " + errorCode + "\nMensaje: " + errorMessage, 
+        "Error", 
+        JOptionPane.ERROR_MESSAGE
+    );
+} finally {
             try {
                 // Cerrar conexiones
                 if (rs != null) rs.close();
@@ -179,7 +192,7 @@ public class FrmDashboard extends javax.swing.JFrame {
       try{
             // Conectar a la base de datos Oracle (ajusta los parámetros de conexión)
           //  conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "usuario", "contraseña");
-                      stmt = conn.prepareCall("{ call consultar_noticia_TermTitulo(?,?) }");
+        stmt = conn.prepareCall("{ call PKG_GESTION_NOTICIAS.listar_noticias(?) }");
  
             // Configurar parámetros de entrada y salida
             stmt.setString(1, titulo);
@@ -246,18 +259,29 @@ public class FrmDashboard extends javax.swing.JFrame {
                     panelTexto.add(lblEscritor);
                     panelTexto.add(lblFecha);
                 
+                 JPanel panelBotones = new JPanel();
+            panelBotones.setLayout(new FlowLayout());
+            panelBotones.add(btnVerMas);
+            panelBotones.add(btnAgregarComentario);
                 // Agregar los componentes al panel
                 panelNoticia.add(panelTexto, BorderLayout.CENTER);
-              //  panelNoticia.add(btnVerMas, BorderLayout.SOUTH);
-                panelNoticia.add(btnAgregarComentario, BorderLayout.NORTH);
 
+               panelNoticia.add(panelBotones, BorderLayout.SOUTH);
                 // Agregar panel al panel principal
                 panelNoticias.add(panelNoticia);
             }
             rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al buscar noticias: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                int errorCode = ex.getErrorCode(); // Código de error de Oracle
+                    String errorMessage = ex.getMessage(); // Mensaje completo del error
+
+         JOptionPane.showMessageDialog(
+        this, 
+        "Ocurrió un error al listar las noticias:\nCódigo: " + errorCode + "\nMensaje: " + errorMessage, 
+        "Error", 
+        JOptionPane.ERROR_MESSAGE
+    );
         }
 
         // Refrescar el panel principal

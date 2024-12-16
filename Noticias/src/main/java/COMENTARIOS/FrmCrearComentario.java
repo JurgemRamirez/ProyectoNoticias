@@ -26,6 +26,7 @@ public class FrmCrearComentario extends javax.swing.JFrame {
         initComponents();
         this.idNoticia = idNoticia;
       // System.out.println("idNoticia: " + idNoticia);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
     }
 
