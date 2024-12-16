@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class ComentarioDAO {
-    private Connection connection;
+private Connection connection;
 
 
     public ComentarioDAO(Connection connection) {

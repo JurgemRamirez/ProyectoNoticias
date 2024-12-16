@@ -3,11 +3,11 @@ package COMENTARIOS;
 import java.sql.Date;
 
 public class Comentario {
-    private int comentarioId;
-    private int newsId;
-    private int userId;
-    private String contenidoComentario;
-    private Date fechaComentada;
+private int comentarioId;
+private int newsId;
+private int userId;
+private String contenidoComentario;
+private Date fechaComentada;
 
 
     public int getComentarioId() {

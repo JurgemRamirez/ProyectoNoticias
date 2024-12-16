@@ -1,9 +1,9 @@
 package COMENTARIOS;
 
 public class ComentarioDTO {
-    private int newsId;
-    private int userId;
-    private String contenidoComentario;
+private int newsId;
+private int userId;
+private String contenidoComentario;
 
 
     public ComentarioDTO(int newsId, int userId, String contenidoComentario) {

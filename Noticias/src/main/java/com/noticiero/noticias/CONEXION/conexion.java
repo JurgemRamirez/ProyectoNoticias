@@ -15,9 +15,9 @@ public class conexion {
     
     
     private final String DRIVER = "oracle.jdbc.OracleDriver";
-    private final String URL = "jdbc:oracle:thin:@//localhost:1521/XE";
-    private final String USER = "PROYTECTOLGDB";
-    private final String PASWORD = "Admin123";
+    private final String URL = "jdbc:oracle:thin:@//localhost:1521/orcl";
+    private final String USER = "progra";
+    private final String PASWORD = "progras";
     
     
 
