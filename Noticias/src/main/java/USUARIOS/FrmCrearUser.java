@@ -39,7 +39,7 @@ public class FrmCrearUser extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         contrasena = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Registro Usuario");
